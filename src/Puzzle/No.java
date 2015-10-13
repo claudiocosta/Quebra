@@ -1,4 +1,4 @@
-package Quebra;
+package Puzzle;
 
 /**
  * Cristiano Vicente

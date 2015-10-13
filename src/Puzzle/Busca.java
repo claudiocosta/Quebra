@@ -1,4 +1,4 @@
-package Quebra;
+package Puzzle;
 
 import java.util.List;
 import java.util.LinkedList;
