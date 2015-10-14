@@ -1,3 +1,10 @@
+/**
+ * Cristiano Vicente RA 443913
+ * Claudio Roberto Costa RA 527033
+ * Rafael Anselmo RA 525650
+ * Melisa Cordeiro RA 532533
+ */
+
 package Puzzle;
 
 import java.util.List;
@@ -5,7 +12,7 @@ import java.util.LinkedList;
 
 public class Busca {
     List<No> pilha_fila = new LinkedList<>();
-    int limite = 15;
+    int limite = 30;
 
     // testa a solução
     public boolean testeObjetivo(No base) {
@@ -121,6 +128,18 @@ public class Busca {
             if (testeObjetivo(aux))
                 return aux;
             else if (aux.profundidade < limite)
+                sucessor(aux);
+        }
+        return raiz;
+    }
+    // busca em profundidade
+    public No buscaProf(No raiz) {
+        pilha_fila.add(raiz);
+        while (pilha_fila.size() != 0) {
+            No aux = pilha_fila.remove(pilha_fila.size() - 1);
+            if (testeObjetivo(aux))
+                return aux;
+            else
                 sucessor(aux);
         }
         return raiz;

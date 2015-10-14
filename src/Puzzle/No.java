@@ -1,10 +1,10 @@
 package Puzzle;
 
 /**
- * Cristiano Vicente
+ * Cristiano Vicente RA 443913
  * Claudio Roberto Costa RA 527033
- * Rafael Anselmo RA
- * Melisa Cordeiro
+ * Rafael Anselmo RA 525650
+ * Melisa Cordeiro RA 532533
  */
 public class No {
     int estado[][] = new int[3][3];
