@@ -16,15 +16,19 @@ public class Puzzle {
         Busca find = new Busca();
 
         //int iniciar[][] = new int[][]{{4, 5, 6}, {1, 0, 3}, {7, 8, 2}};
-        //int iniciar[][] = new int[][]{{0, 2, 3}, {7, 4, 1}, {8, 6, 5}};
-        int iniciar[][] = new int[][]{{1, 2, 3}, {4, 5, 6}, {0, 7, 8}};
+        int iniciar[][] = new int[][]{{0, 2, 3}, {7, 4, 1}, {8, 6, 5}};
+        //int iniciar[][] = new int[][]{{1, 2, 3}, {4, 5, 6}, {0, 7, 8}};
         //int iniciar[][] = new int[][]{{7, 2, 3}, {4, 6, 5}, {1, 8, 0}};
 
         No raiz = new No(iniciar, "raiz", null, 0, 0);
         No aux;
 
+        System.out.println("Inicial");
+        raiz.printEstado();
         // busca em profundidade ou largura
-        aux = find.buscaProfLimit(raiz);
+        aux = find.buscaLargura(raiz);
+        System.out.println("Final");
+        aux.printEstado();
         // empilha os nos para imprimir ordenado ascendente
         while (aux.pai != null) {
             arvore.add(aux);

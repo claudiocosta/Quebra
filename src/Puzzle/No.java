@@ -27,4 +27,14 @@ public class No {
         this.custocaminho = custocaminho;
         this.profundidade = profundidade;
     }
+
+    public void printEstado() {
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
+                System.out.printf("%d ", this.estado[x][y]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 }
