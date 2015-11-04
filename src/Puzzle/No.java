@@ -35,7 +35,7 @@ public class No implements Comparable<No> {
     }
 
     public int getH() {
-        return getHeuristic(this.estado);
+        return this.h;
     }
 
     public void setH(int h) {
@@ -44,16 +44,6 @@ public class No implements Comparable<No> {
 
     public int getGH() {
         return this.g + this.h;
-    }
-
-    // Algoritmo Manhattan distances
-    public int getHeuristic(int[] array) {
-        int heuristic = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] != 0)
-                heuristic += Math.abs((i / 3) - ((array[i] - 1) / 3)) + Math.abs((i % 3) - ((array[i] - 1) % 3));
-        }
-        return heuristic;
     }
 
     @Override

@@ -23,10 +23,10 @@ public class Puzzle {
         //int iniciar[] = new int[]{1, 2, 3, 4, 5, 6, 0, 7, 8}; //2
         //int iniciar[] = new int[]{1, 5, 2, 4, 0, 3, 7, 8, 6}; //4
         //int iniciar[] = new int[]{0, 2, 3, 1, 7, 5, 8, 4, 6}; //8
-        //int iniciar[] = new int[]{1, 2, 3, 7, 0, 8, 6, 4, 5}; //10
+        int iniciar[] = new int[]{1, 2, 3, 7, 0, 8, 6, 4, 5}; //10
         //int iniciar[] = new int[]{2, 6, 3, 1, 7, 8, 4, 5, 0}; //12
         //int iniciar[] = new int[]{1, 3, 0, 2, 6, 5, 4, 7, 8}; //12
-        int iniciar[] = new int[]{0, 3, 6, 2, 1, 7, 4, 8, 5}; //14
+        //int iniciar[] = new int[]{0, 3, 6, 2, 1, 7, 4, 8, 5}; //14
         //int iniciar[] = new int[]{0, 2, 3, 7, 4, 1, 8, 6, 5}; //14
         //int iniciar[] = new int[]{2, 8, 3, 5, 0, 6, 1, 4, 7}; //14
         //int iniciar[] = new int[]{7, 4, 1, 8, 3, 2, 0, 5, 6}; //14
@@ -47,10 +47,10 @@ public class Puzzle {
         System.out.println("1- Busca em Largura   ");
         System.out.println("2- Busca em Profundidade Limitada");
         System.out.println("3- Busca em Profundidade");
-        System.out.println("4- Busca Gulosa");
+        System.out.println("4- Busca GME");
         System.out.println("5- Busca A*");
 
-        opcao = 5;//scan.nextInt();
+        opcao = 1;//scan.nextInt();
         long startTime = System.currentTimeMillis();
         switch (opcao) {
             case 1:
