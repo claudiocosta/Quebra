@@ -7,137 +7,107 @@
 
 package Puzzle;
 
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 public class Busca {
     List<No> pilha_fila = new LinkedList<>();
+    PriorityQueue<No> queue = new PriorityQueue();
     int limite = 30;
 
     // testa a solução
-    public boolean testeObjetivo(No base) {
-        int objetivo[][] = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (base.estado[i][j] != objetivo[i][j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean testeObjetivo(int[] base) {
+        int objetivo[] = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 0};
+        return Arrays.equals(base, objetivo);
     }
 
     // localiza a posição do 0
     public int pos_0(No aux) {
-        int cont = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (aux.estado[i][j] == 0) {
-                    return cont;
-                } else {
-                    cont++;
-                }
-            }
+        for (int i = 0; i < 9; i++) {
+            if (aux.estado[i] == 0)
+                return i;
         }
-        return cont;
+        return 9;
     }
 
-    // grupo de ações possivéis para cada estado
+    // grupo de ações possivéis para cada estado v2
     public void sucessor(No aux) {
-        switch (pos_0(aux)) {
-            case 0:
-                pilha_fila.add(movUP(aux, 0, 0));
-                pilha_fila.add(movLeft(aux, 0, 0));
-                break;
-            case 1:
-                pilha_fila.add(movRight(aux, 0, 1));
-                pilha_fila.add(movUP(aux, 0, 1));
-                pilha_fila.add(movLeft(aux, 0, 1));
-                break;
-            case 2:
-                pilha_fila.add(movRight(aux, 0, 2));
-                pilha_fila.add(movUP(aux, 0, 2));
-                break;
-            case 3:
-                pilha_fila.add(movDown(aux, 1, 0));
-                pilha_fila.add(movUP(aux, 1, 0));
-                pilha_fila.add(movLeft(aux, 1, 0));
-                break;
-            case 4:
-                pilha_fila.add(movRight(aux, 1, 1));
-                pilha_fila.add(movDown(aux, 1, 1));
-                pilha_fila.add(movUP(aux, 1, 1));
-                pilha_fila.add(movLeft(aux, 1, 1));
-                break;
-            case 5:
-                pilha_fila.add(movRight(aux, 1, 2));
-                pilha_fila.add(movDown(aux, 1, 2));
-                pilha_fila.add(movUP(aux, 1, 2));
-                break;
-            case 6:
-                pilha_fila.add(movDown(aux, 2, 0));
-                pilha_fila.add(movLeft(aux, 2, 0));
-                break;
-            case 7:
-                pilha_fila.add(movRight(aux, 2, 1));
-                pilha_fila.add(movDown(aux, 2, 1));
-                pilha_fila.add(movLeft(aux, 2, 1));
-                break;
-            case 8:
-                pilha_fila.add(movRight(aux, 2, 2));
-                pilha_fila.add(movDown(aux, 2, 2));
-                break;
-        }
+        int index = pos_0(aux);
+        int posX = index % 3;
+        int mov = aux.pos_ant - index;
+        if (index < 3)
+            pilha_fila.add(movUP(aux, index));
+        else if (index < 6) {
+            if (mov != 3)
+                pilha_fila.add(movUP(aux, index));
+            if (mov != -3)
+                pilha_fila.add(movDown(aux, index));
+        } else
+            pilha_fila.add(movDown(aux, index));
+
+        if (posX == 0)
+            pilha_fila.add(movLeft(aux, index));
+        else if (posX == 1) {
+            if (mov != 1)
+                pilha_fila.add(movLeft(aux, index));
+            if (mov != -1)
+                pilha_fila.add(movRight(aux, index));
+        } else
+            pilha_fila.add(movRight(aux, index));
     }
 
     // conjunto de metodos de movimentos
-    public No movUP(No pai, int i, int j) {
-        No novo = new No(pai.estado, "up", pai, pai.custocaminho + 1, pai.profundidade + 1);
-        novo.estado[i][j] = pai.estado[i + 1][j];
-        novo.estado[i + 1][j] = 0;
+    public No movUP(No pai, int i) {
+        No novo = new No(pai.estado.clone(), "up", pai, pai.g + 1, i);
+        novo.estado[i] = pai.estado[i + 3];
+        novo.estado[i + 3] = 0;
         return novo;
     }
 
-    public No movDown(No pai, int i, int j) {
-        No novo = new No(pai.estado, "down", pai, pai.custocaminho + 1, pai.profundidade + 1);
-        novo.estado[i][j] = pai.estado[i - 1][j];
-        novo.estado[i - 1][j] = 0;
+    public No movDown(No pai, int i) {
+        No novo = new No(pai.estado.clone(), "down", pai, pai.g + 1, i);
+        novo.estado[i] = pai.estado[i - 3];
+        novo.estado[i - 3] = 0;
         return novo;
     }
 
-    public No movLeft(No pai, int i, int j) {
-        No novo = new No(pai.estado, "left", pai, pai.custocaminho + 1, pai.profundidade + 1);
-        novo.estado[i][j] = pai.estado[i][j + 1];
-        novo.estado[i][j + 1] = 0;
+    public No movLeft(No pai, int i) {
+        No novo = new No(pai.estado.clone(), "left", pai, pai.g + 1, i);
+        novo.estado[i] = pai.estado[i + 1];
+        novo.estado[i + 1] = 0;
         return novo;
     }
 
-    public No movRight(No pai, int i, int j) {
-        No novo = new No(pai.estado, "right", pai, pai.custocaminho + 1, pai.profundidade + 1);
-        novo.estado[i][j] = pai.estado[i][j - 1];
-        novo.estado[i][j - 1] = 0;
+    public No movRight(No pai, int i) {
+        No novo = new No(pai.estado.clone(), "right", pai, pai.g + 1, i);
+        novo.estado[i] = pai.estado[i - 1];
+        novo.estado[i - 1] = 0;
         return novo;
     }
 
-    // busca em profundidade com limite
+
+    // busca em h com limite
     public No buscaProfLimit(No raiz) {
         pilha_fila.add(raiz);
-        while (pilha_fila.size() != 0) {
+        while (!pilha_fila.isEmpty()) {
             No aux = pilha_fila.remove(pilha_fila.size() - 1);
-            if (testeObjetivo(aux))
+            if (testeObjetivo(aux.estado))
                 return aux;
-            else if (aux.profundidade < limite)
+            else if (aux.h < limite)
                 sucessor(aux);
         }
         return raiz;
     }
-    // busca em profundidade
+
+    // busca em h
     public No buscaProf(No raiz) {
         pilha_fila.add(raiz);
-        while (pilha_fila.size() != 0) {
+        while (!pilha_fila.isEmpty()) {
             No aux = pilha_fila.remove(pilha_fila.size() - 1);
-            if (testeObjetivo(aux))
+            if (testeObjetivo(aux.estado))
                 return aux;
             else
                 sucessor(aux);
@@ -148,13 +118,40 @@ public class Busca {
     // busca em largura
     public No buscaLargura(No raiz) {
         pilha_fila.add(raiz);
-        while (pilha_fila.size() != 0) {
+        while (!pilha_fila.isEmpty()) {
             No aux = pilha_fila.remove(0);
-            if (testeObjetivo(aux))
+            if (testeObjetivo(aux.estado))
                 return aux;
             else
                 sucessor(aux);
         }
         return raiz;
+    }
+
+    public No buscaHeuristica(No raiz) {
+        int distance = raiz.h;
+        No busca = raiz;
+        pilha_fila.add(raiz);
+        while (distance != 0) {
+            while (!pilha_fila.isEmpty()) {
+                No aux = pilha_fila.remove(0);
+
+                System.out.printf("%d %d\n\n", aux.h, aux.g);
+                System.out.printf("\n######### %d #########\n\n", distance);
+                aux.printEstado();
+                if (aux.h == 0)
+                    return aux;
+                else if (aux.h < distance) {
+                    distance = aux.h;
+                    System.out.printf("\n######### %d #########\n\n", aux.h);
+                    pilha_fila.add(0, aux);
+                }
+                sucessor(aux);
+            }
+
+        }
+        System.out.println(busca.h);
+
+        return busca;
     }
 }

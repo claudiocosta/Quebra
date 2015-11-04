@@ -6,35 +6,59 @@ package Puzzle;
  * Rafael Anselmo RA 525650
  * Melisa Cordeiro RA 532533
  */
-public class No {
-    int estado[][] = new int[3][3];
+public class No implements Comparable<No> {
+    int estado[] = new int[9];
     String acao;
     No pai;
-    int custocaminho;
-    int profundidade;
+    int g;
+    int h;
+    int pos_ant;
 
     public No() {
     }
 
-    public No(int[][] estado, String acao, No pai, int custocaminho, int profundidade) {
-        int aux[][] = new int[3][3];
-        for (int i = 0; i < 3; i++) {
-            aux[i] = estado[i].clone();
-        }
-        this.estado = aux;
+    public No(int[] estado, String acao, No pai, int g, int pos_ant) {
+        this.estado = estado;
         this.acao = acao;
         this.pai = pai;
-        this.custocaminho = custocaminho;
-        this.profundidade = profundidade;
+        this.g = g;
+        this.h = getHeuristic(estado);
+        this.pos_ant = pos_ant;
     }
 
     public void printEstado() {
-        for (int x = 0; x < 3; x++) {
-            for (int y = 0; y < 3; y++) {
-                System.out.printf("%d ", this.estado[x][y]);
-            }
-            System.out.println();
+        for (int x = 0; x < 9; x++) {
+            System.out.printf("%d ", this.estado[x]);
+            if (x == 2 || x == 5)
+                System.out.println();
         }
         System.out.println();
     }
+
+    public int getH() {
+        return getHeuristic(this.estado);
+    }
+
+    public int getGH() {
+        return this.g + this.h;
+    }
+
+    // Algoritmo Manhattan distances
+    public int getHeuristic(int[] array) {
+        int heuristic = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != 0)
+                heuristic += Math.abs((i / 3) - ((array[i] - 1) / 3)) + Math.abs((i % 3) - ((array[i] - 1) % 3));
+        }
+        return heuristic;
+    }
+
+    @Override
+    public int compareTo(No o) {
+        if(this.h < o.h) {
+            return 1;
+        }
+        return 0;
+    }
+
 }
