@@ -24,6 +24,26 @@ public class Busca {
         return Arrays.equals(base, objetivo);
     }
 
+    // H1 - peças fora do lugar
+    public int misplacedTiles(int[] array) {
+        int heuristic = 0;
+        for (int i = 0; i < array.length; i++) {
+            if ((i != (array[i] - 1)) && (array[i] != 0))
+                heuristic++;
+        }
+        return heuristic;
+    }
+
+    // H2 - Algoritmo Manhattan distances
+    public int manhattanDistance(int[] array) {
+        int heuristic = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != 0)
+                heuristic += Math.abs((i / 3) - ((array[i] - 1) / 3)) + Math.abs((i % 3) - ((array[i] - 1) % 3));
+        }
+        return heuristic;
+    }
+
     // localiza a posição do 0
     public int pos_0(No aux) {
         for (int i = 0; i < 9; i++) {
@@ -128,7 +148,12 @@ public class Busca {
         return raiz;
     }
 
-    public No buscaHeuristica(No raiz) {
+    public No aStar (No raiz, int op) {
+        if(op == 1)
+            raiz.setH(misplacedTiles(raiz.estado));
+        else
+            raiz.setH(manhattanDistance(raiz.estado));
+
         int distance = raiz.h;
         No busca = raiz;
         pilha_fila.add(raiz);

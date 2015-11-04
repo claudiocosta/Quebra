@@ -22,7 +22,6 @@ public class No implements Comparable<No> {
         this.acao = acao;
         this.pai = pai;
         this.g = g;
-        this.h = getHeuristic(estado);
         this.pos_ant = pos_ant;
     }
 
@@ -37,6 +36,10 @@ public class No implements Comparable<No> {
 
     public int getH() {
         return getHeuristic(this.estado);
+    }
+
+    public void setH(int h) {
+        this.h = h;
     }
 
     public int getGH() {

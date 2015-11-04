@@ -47,17 +47,30 @@ public class Puzzle {
         System.out.println("1- Busca em Largura   ");
         System.out.println("2- Busca em Profundidade Limitada");
         System.out.println("3- Busca em Profundidade");
-        opcao = 1;//scan.nextInt();
+        System.out.println("4- Busca Gulosa");
+        System.out.println("5- Busca A*");
+
+        opcao = 5;//scan.nextInt();
         long startTime = System.currentTimeMillis();
         switch (opcao) {
             case 1:
-                aux = find.buscaHeuristica(raiz);
+                aux = find.buscaLargura(raiz);
                 break;
             case 2:
                 aux = find.buscaProfLimit(raiz);
                 break;
             case 3:
                 aux = find.buscaProf(raiz);
+                break;
+            case 4:
+                //---
+                break;
+            case 5:
+                System.out.println("1- H1 - nome");
+                System.out.println("2- H2 - nome");
+                opcao = 2;//scan.nextInt();
+
+                aux = find.aStar(raiz, opcao);
                 break;
         }
 
