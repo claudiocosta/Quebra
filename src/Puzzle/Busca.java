@@ -9,6 +9,7 @@ package Puzzle;
 
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
@@ -96,11 +97,10 @@ public class Busca {
 
         while (distance != 0) {
 
-            States.genStates(raiz, queue);
+            States.genStates(raiz, queue, op);
 
             //for (No no : queue)
             //        queue.add(no);
-
 
 
             //while (!list.isEmpty()) {
@@ -110,5 +110,33 @@ public class Busca {
         System.out.println(busca.h);
 
         return busca;
+    }
+}
+
+class ComparatorH {
+    public static Comparator<No> getComparatorH() {
+        return new Comparator<No>() {
+            @Override
+            public int compare(No o1, No o2) {
+                if (o1.getH() < o1.getH())
+                    return 1;
+                else if (o1.getH() > o1.getH())
+                    return -1;
+                return 0;
+            }
+        };
+    }
+
+    public static Comparator<No> getComparatorGH() {
+        return new Comparator<No>() {
+            @Override
+            public int compare(No o1, No o2) {
+                if (o1.getGH() < o2.getGH())
+                    return 1;
+                else if (o1.getGH() > o2.getGH())
+                    return -1;
+                return 0;
+            }
+        };
     }
 }

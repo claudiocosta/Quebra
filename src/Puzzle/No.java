@@ -6,7 +6,7 @@ package Puzzle;
  * Rafael Anselmo RA 525650
  * Melisa Cordeiro RA 532533
  */
-public class No implements Comparable<No> {
+public class No {
     int estado[] = new int[9];
     String acao;
     No pai;
@@ -17,12 +17,18 @@ public class No implements Comparable<No> {
     public No() {
     }
 
-    public No(int[] estado, String acao, No pai, int g, int pos_ant) {
+    public No(int[] estado, String acao, No pai, int g, int h, int pos_ant) {
         this.estado = estado;
         this.acao = acao;
         this.pai = pai;
         this.g = g;
         this.pos_ant = pos_ant;
+        if (h == 1)
+            this.h = misplacedTiles(estado);
+        else if (h == 2)
+            this.h = manhattanDistance(estado);
+        else
+            this.h = 0;
     }
 
     public void printEstado() {
@@ -46,12 +52,23 @@ public class No implements Comparable<No> {
         return this.g + this.h;
     }
 
-    @Override
-    public int compareTo(No o) {
-        if(this.h < o.h) {
-            return 1;
+    // H1 - peças fora do lugar
+    public int misplacedTiles(int[] array) {
+        int heuristic = 0;
+        for (int i = 0; i < array.length; i++) {
+            if ((i != (array[i] - 1)) && (array[i] != 0))
+                heuristic++;
         }
-        return 0;
+        return heuristic;
     }
 
+    // H2 - Algoritmo Manhattan distances
+    public int manhattanDistance(int[] array) {
+        int heuristic = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != 0)
+                heuristic += Math.abs((i / 3) - ((array[i] - 1) / 3)) + Math.abs((i % 3) - ((array[i] - 1) % 3));
+        }
+        return heuristic;
+    }
 }

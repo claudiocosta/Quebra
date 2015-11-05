@@ -40,7 +40,7 @@ public class Puzzle {
         //int iniciar[] = new int[]{5, 2, 1, 3, 0, 4, 6, 8, 7}; //30
 
 
-        No raiz = new No(iniciar, "raiz", null, 0, 9);
+        No raiz = new No(iniciar, "raiz", null, 0, 0, 9);
         No aux = new No();
 
         System.out.println("+++++++++++++++++++++++++++");
@@ -66,8 +66,8 @@ public class Puzzle {
                 //---
                 break;
             case 5:
-                System.out.println("1- H1 - nome");
-                System.out.println("2- H2 - nome");
+                System.out.println("1- H1 - misplacedTiles");
+                System.out.println("2- H2 - manhattanDistance");
                 opcao = 2;//scan.nextInt();
 
                 aux = find.aStar(raiz, opcao);
