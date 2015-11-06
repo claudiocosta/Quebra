@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Emanuela/Dropbox/computação/6°%20Semestre/Inteligência%20Artificial/Quebra/src/quebra/Quebra.java</file>
-            <file>file:/C:/Users/Emanuela/Dropbox/computação/6°%20Semestre/Inteligência%20Artificial/Quebra/src/quebra/Busca.java</file>
-            <file>file:/C:/Users/Emanuela/Dropbox/computação/6°%20Semestre/Inteligência%20Artificial/Quebra/src/quebra/No.java</file>
+            <file>file:/C:/Quebra/src/Puzzle/Busca.java</file>
+            <file>file:/C:/Quebra/src/Puzzle/States.java</file>
+            <file>file:/C:/Quebra/src/Puzzle/No.java</file>
+            <file>file:/C:/Quebra/src/Puzzle/Puzzle.java</file>
         </group>
     </open-files>
 </project-private>

@@ -47,8 +47,10 @@ public class Puzzle {
         System.out.println("1- Busca em Largura   ");
         System.out.println("2- Busca em Profundidade Limitada");
         System.out.println("3- Busca em Profundidade");
-        System.out.println("4- Busca GME");
-        System.out.println("5- Busca A*");
+        System.out.println("4- Busca em Aprofundamento Iterativo");
+        System.out.println("5- Busca de Custo Uniforme");
+        System.out.println("6- Busca GME");
+        System.out.println("7- Busca A*");
 
         opcao = 1;//scan.nextInt();
         long startTime = System.currentTimeMillis();
@@ -63,9 +65,19 @@ public class Puzzle {
                 aux = find.buscaProf(raiz);
                 break;
             case 4:
-                //---
+                aux = find.buscaIDA(raiz);
                 break;
             case 5:
+                aux = find.buscaCustoUniforme(raiz);
+                break;
+            case 6:
+                System.out.println("1- H1 - misplacedTiles");
+                System.out.println("2- H2 - manhattanDistance");
+                opcao = 2;//scan.nextInt();
+
+                aux = find.buscaGME(raiz, opcao);
+                break;
+            case 7:
                 System.out.println("1- H1 - misplacedTiles");
                 System.out.println("2- H2 - manhattanDistance");
                 opcao = 2;//scan.nextInt();

@@ -19,13 +19,12 @@ public class Busca {
 
     int limite = 30;
 
-    // testa a solução
+//################### TESTA O OBJETIVO ######################################### 
     public boolean testeObjetivo(int[] base) {
         int objetivo[] = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 0};
         return Arrays.equals(base, objetivo);
     }
-
-    // H1 - peças fora do lugar
+//################### H1 - PEÇAS FORA DO LUGAR################################## 
     public int misplacedTiles(int[] array) {
         int heuristic = 0;
         for (int i = 0; i < array.length; i++) {
@@ -34,8 +33,7 @@ public class Busca {
         }
         return heuristic;
     }
-
-    // H2 - Algoritmo Manhattan distances
+//################### H2 - ALGORITMO MANHATTAN DISTANCE ######################## 
     public int manhattanDistance(int[] array) {
         int heuristic = 0;
         for (int i = 0; i < array.length; i++) {
@@ -44,34 +42,8 @@ public class Busca {
         }
         return heuristic;
     }
-
-    // busca em h com limite
-    public No buscaProfLimit(No raiz) {
-        list.add(raiz);
-        while (!list.isEmpty()) {
-            No aux = list.remove(list.size() - 1);
-            if (testeObjetivo(aux.estado))
-                return aux;
-            else if (aux.h < limite)
-                States.genStates(aux, list);
-        }
-        return raiz;
-    }
-
-    // busca em h
-    public No buscaProf(No raiz) {
-        list.add(raiz);
-        while (!list.isEmpty()) {
-            No aux = list.remove(list.size() - 1);
-            if (testeObjetivo(aux.estado))
-                return aux;
-            else
-                States.genStates(aux, list);
-        }
-        return raiz;
-    }
-
-    // busca em largura
+    
+//################### BUSCA EM LARGURA ######################################### 
     public No buscaLargura(No raiz) {
         list.add(raiz);
         while (!list.isEmpty()) {
@@ -83,7 +55,73 @@ public class Busca {
         }
         return raiz;
     }
+    
+//################### BUSCA EM PROFUNDIDADE LIMITADA ########################### 
+    public No buscaProfLimit(No raiz) {
+        list.add(raiz);
+        while (!list.isEmpty()) {
+            No aux = list.remove(list.size() - 1);
+            if (testeObjetivo(aux.estado))
+                return aux;
+            else if (aux.g < limite)
+                States.genStates(aux, list);
+        }
+        return raiz;
+    }
 
+//################### BUSCA EM PROFUNDIDADE #################################### 
+    public No buscaProf(No raiz) {
+        list.add(raiz);
+        while (!list.isEmpty()) {
+            No aux = list.remove(list.size() - 1);
+            if (testeObjetivo(aux.estado))
+                return aux;
+            else
+                States.genStates(aux, list);
+        }
+        return raiz;
+    }
+    
+//################### BUSCA DE APROFUNDAMENTO ITERATIVO ######################## 
+    public No buscaIDA(No raiz) {
+        list.add(raiz);
+        while (!list.isEmpty()) {
+            No aux = list.remove(list.size() - 1);
+            if (testeObjetivo(aux.estado))
+                return aux;
+            else if (aux.g < limite)
+                States.genStates(aux, list);
+            else if ((aux.g == limite) && list.isEmpty())
+                States.genStates(aux, list);
+                limite++;
+        }
+        return raiz;
+    }
+//################### BUSCA DE CUSTO UNIFORME ##################################
+    public No buscaCustoUniforme(No raiz) {
+        list.add(raiz);
+        while (!list.isEmpty()) {
+            No aux = list.remove(0);  //remover o nó com menor caminho
+            if (testeObjetivo(aux.estado))
+                return aux;
+            else
+                States.genStates(aux, list);
+        }
+        return raiz;
+    }
+//################### BUSCA GME ################################################
+    public No buscaGME(No raiz, int op){
+        if (op == 1)
+            raiz.setH(misplacedTiles(raiz.estado));
+        else
+            raiz.setH(manhattanDistance(raiz.estado));
+        
+        //ainda tem que implementar
+        
+        
+        return raiz;
+    }
+//################### BUSCA A* #################################################     
     public No aStar(No raiz, int op) {
         if (op == 1)
             raiz.setH(misplacedTiles(raiz.estado));
@@ -113,6 +151,7 @@ public class Busca {
     }
 }
 
+//################### COMPARATOR H ############################################# 
 class ComparatorH {
     public static Comparator<No> getComparatorH() {
         return new Comparator<No>() {
@@ -126,7 +165,7 @@ class ComparatorH {
             }
         };
     }
-
+//################### COMPARATOR GH ############################################
     public static Comparator<No> getComparatorGH() {
         return new Comparator<No>() {
             @Override
@@ -134,6 +173,19 @@ class ComparatorH {
                 if (o1.getGH() < o2.getGH())
                     return 1;
                 else if (o1.getGH() > o2.getGH())
+                    return -1;
+                return 0;
+            }
+        };
+    }
+//################### COMPARATOR G #############################################    
+    public static Comparator<No> getComparatorG() {
+        return new Comparator<No>() {
+            @Override
+            public int compare(No o1, No o2) {
+                if (o1.getG() < o2.getG())
+                    return 1;
+                else if (o1.getG() > o2.getG())
                     return -1;
                 return 0;
             }

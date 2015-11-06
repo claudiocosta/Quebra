@@ -48,6 +48,10 @@ public class No {
         this.h = h;
     }
 
+    public int getG() {
+        return g;
+    }
+    
     public int getGH() {
         return this.g + this.h;
     }
