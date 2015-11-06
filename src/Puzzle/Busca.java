@@ -15,9 +15,9 @@ import java.util.PriorityQueue;
 
 public class Busca {
     LinkedList<No> list = new LinkedList<>();
-    PriorityQueue<No> queue = new PriorityQueue();
+    PriorityQueue<No> queue;
 
-    int limite = 30;
+    int limite = 5;
 
     // testa a solução
     public boolean testeObjetivo(int[] base) {
@@ -52,7 +52,7 @@ public class Busca {
             No aux = list.remove(list.size() - 1);
             if (testeObjetivo(aux.estado))
                 return aux;
-            else if (aux.h < limite)
+            else if (aux.g < limite)
                 States.genStates(aux, list);
         }
         return raiz;
@@ -71,6 +71,26 @@ public class Busca {
         return raiz;
     }
 
+    // busca IDA
+    public No buscaIDA(No raiz) {
+        list.add(raiz);
+        while (!list.isEmpty()) {
+            No aux = list.remove(list.size() - 1);
+            System.out.println(list.size());
+            //aux.printEstado();
+            if (testeObjetivo(aux.estado))
+                return aux;
+            else if (aux.g < limite)
+                States.genStates(aux, list);
+            else if (aux.g == limite && list.isEmpty()) {
+                limite++;
+                States.genStates(aux, list);
+                System.out.println(limite + " g " + aux.g);
+            }
+        }
+        return raiz;
+    }
+
     // busca em largura
     public No buscaLargura(No raiz) {
         list.add(raiz);
@@ -85,31 +105,25 @@ public class Busca {
     }
 
     public No aStar(No raiz, int op) {
+        queue = new PriorityQueue<>(ComparatorH.getComparatorGH());
+        No aux = raiz;
+
         if (op == 1)
             raiz.setH(misplacedTiles(raiz.estado));
         else
             raiz.setH(manhattanDistance(raiz.estado));
 
-        //genStates(raiz);
-        int distance = raiz.getGH();
-        No busca = raiz;
-        queue.add(raiz);
+        int distance = raiz.getH();
+
+        if (distance == 0)
+            return raiz;
 
         while (distance != 0) {
-
-            States.genStates(raiz, queue, op);
-
-            //for (No no : queue)
-            //        queue.add(no);
-
-
-            //while (!list.isEmpty()) {
-
-            break;
+            States.genStates(aux, queue, op);
+            aux = queue.remove();
+            distance = aux.getH();
         }
-        System.out.println(busca.h);
-
-        return busca;
+        return aux;
     }
 }
 
@@ -118,9 +132,9 @@ class ComparatorH {
         return new Comparator<No>() {
             @Override
             public int compare(No o1, No o2) {
-                if (o1.getH() < o1.getH())
+                if (o1.getH() > o1.getH())
                     return 1;
-                else if (o1.getH() > o1.getH())
+                else if (o1.getH() < o1.getH())
                     return -1;
                 return 0;
             }
@@ -131,9 +145,9 @@ class ComparatorH {
         return new Comparator<No>() {
             @Override
             public int compare(No o1, No o2) {
-                if (o1.getGH() < o2.getGH())
+                if (o1.getGH() > o2.getGH())
                     return 1;
-                else if (o1.getGH() > o2.getGH())
+                else if (o1.getGH() < o2.getGH())
                     return -1;
                 return 0;
             }

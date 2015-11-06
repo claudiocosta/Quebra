@@ -45,31 +45,54 @@ public class States {
     }
 
     // conjunto de metodos de movimentos
-    public static No movUP(No pai, int i, int h) {
-        No novo = new No(pai.estado.clone(), "up", pai, pai.g + 1, h, i);
+    public static No movUP(No pai, int i, int op) {
+        No novo = new No(pai.estado.clone(), "up", pai, pai.g + 1, i);
         novo.estado[i] = pai.estado[i + 3];
         novo.estado[i + 3] = 0;
+        novo.setH(getHeutistic(novo.estado, op));
         return novo;
     }
 
-    public static No movDown(No pai, int i, int h) {
-        No novo = new No(pai.estado.clone(), "down", pai, pai.g + 1, h, i);
+    public static No movDown(No pai, int i, int op) {
+        No novo = new No(pai.estado.clone(), "down", pai, pai.g + 1, i);
         novo.estado[i] = pai.estado[i - 3];
         novo.estado[i - 3] = 0;
+        novo.setH(getHeutistic(novo.estado, op));
         return novo;
     }
 
-    public static No movLeft(No pai, int i, int h) {
-        No novo = new No(pai.estado.clone(), "left", pai, pai.g + 1, h, i);
+    public static No movLeft(No pai, int i, int op) {
+        No novo = new No(pai.estado.clone(), "left", pai, pai.g + 1, i);
         novo.estado[i] = pai.estado[i + 1];
         novo.estado[i + 1] = 0;
+        novo.setH(getHeutistic(novo.estado, op));
         return novo;
     }
 
-    public static No movRight(No pai, int i, int h) {
-        No novo = new No(pai.estado.clone(), "right", pai, pai.g + 1, h, i);
+    public static No movRight(No pai, int i, int op) {
+        No novo = new No(pai.estado.clone(), "right", pai, pai.g + 1, i);
         novo.estado[i] = pai.estado[i - 1];
         novo.estado[i - 1] = 0;
+        novo.setH(getHeutistic(novo.estado, op));
         return novo;
+    }
+
+    public static int getHeutistic(int[] array, int op) {
+        int heuristic = 0;
+        if (op == 1) {
+            // H1 - peças fora do lugar
+            for (int i = 0; i < array.length; i++) {
+                if ((i != (array[i] - 1)) && (array[i] != 0))
+                    heuristic++;
+            }
+        } else if (op == 2) {
+            // H2 - Algoritmo Manhattan distances
+            for (int i = 0; i < array.length; i++) {
+                if (array[i] != 0)
+                    heuristic += Math.abs((i / 3) - ((array[i] - 1) / 3)) + Math.abs((i % 3) - ((array[i] - 1) % 3));
+            }
+
+        } else return 0;
+        return heuristic;
     }
 }
