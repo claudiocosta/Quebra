@@ -19,31 +19,13 @@ public class Busca {
 
     int limite = 5;
 
-//################### TESTA O OBJETIVO ######################################### 
+    //################### TESTA O OBJETIVO #########################################
     public boolean testeObjetivo(int[] base) {
         int objetivo[] = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 0};
         return Arrays.equals(base, objetivo);
     }
-//################### H1 - PEÇAS FORA DO LUGAR################################## 
-    public int misplacedTiles(int[] array) {
-        int heuristic = 0;
-        for (int i = 0; i < array.length; i++) {
-            if ((i != (array[i] - 1)) && (array[i] != 0))
-                heuristic++;
-        }
-        return heuristic;
-    }
-//################### H2 - ALGORITMO MANHATTAN DISTANCE ######################## 
-    public int manhattanDistance(int[] array) {
-        int heuristic = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] != 0)
-                heuristic += Math.abs((i / 3) - ((array[i] - 1) / 3)) + Math.abs((i % 3) - ((array[i] - 1) % 3));
-        }
-        return heuristic;
-    }
-    
-//################### BUSCA EM LARGURA ######################################### 
+
+    //################### BUSCA EM LARGURA #########################################
     public No buscaLargura(No raiz) {
         list.add(raiz);
         while (!list.isEmpty()) {
@@ -55,8 +37,8 @@ public class Busca {
         }
         return raiz;
     }
-    
-//################### BUSCA EM PROFUNDIDADE LIMITADA ########################### 
+
+    //################### BUSCA EM PROFUNDIDADE LIMITADA ###########################
     public No buscaProfLimit(No raiz) {
         list.add(raiz);
         while (!list.isEmpty()) {
@@ -69,7 +51,7 @@ public class Busca {
         return raiz;
     }
 
-//################### BUSCA EM PROFUNDIDADE #################################### 
+    //################### BUSCA EM PROFUNDIDADE ####################################
     public No buscaProf(No raiz) {
         list.add(raiz);
         while (!list.isEmpty()) {
@@ -81,9 +63,8 @@ public class Busca {
         }
         return raiz;
     }
-<<<<<<< HEAD
 
-    // busca IDA
+    //################### BUSCA DE APROFUNDAMENTO ITERATIVO ########################
     public No buscaIDA(No raiz) {
         list.add(raiz);
         while (!list.isEmpty()) {
@@ -103,59 +84,29 @@ public class Busca {
         return raiz;
     }
 
-    // busca em largura
-    public No buscaLargura(No raiz) {
-=======
-    
-//################### BUSCA DE APROFUNDAMENTO ITERATIVO ######################## 
-    public No buscaIDA(No raiz) {
->>>>>>> e5bb6acc8b67916f74455c4100e049c45f67d310
-        list.add(raiz);
-        while (!list.isEmpty()) {
-            No aux = list.remove(list.size() - 1);
-            if (testeObjetivo(aux.estado))
-                return aux;
-            else if (aux.g < limite)
-                States.genStates(aux, list);
-            else if ((aux.g == limite) && list.isEmpty())
-                States.genStates(aux, list);
-                limite++;
-        }
-        return raiz;
-    }
-//################### BUSCA DE CUSTO UNIFORME ##################################
+    //################### BUSCA DE CUSTO UNIFORME ##################################
     public No buscaCustoUniforme(No raiz) {
-        list.add(raiz);
-        while (!list.isEmpty()) {
-            No aux = list.remove(0);  //remover o nó com menor caminho
+        queue = new PriorityQueue<>(ComparatorH.getComparatorGH());
+        queue.add(raiz);
+        while (!queue.isEmpty()) {
+            No aux = queue.poll();
             if (testeObjetivo(aux.estado))
                 return aux;
             else
-                States.genStates(aux, list);
+                States.genStates(aux, queue);
         }
         return raiz;
     }
-//################### BUSCA GME ################################################
-    public No buscaGME(No raiz, int op){
-        if (op == 1)
-            raiz.setH(misplacedTiles(raiz.estado));
-        else
-            raiz.setH(manhattanDistance(raiz.estado));
-        
-        //ainda tem que implementar
-        
-        
-        return raiz;
-    }
-//################### BUSCA A* #################################################     
-    public No aStar(No raiz, int op) {
-        queue = new PriorityQueue<>(ComparatorH.getComparatorGH());
+
+    //################### BUSCA GME ################################################
+    public No buscaGME(No raiz, int op) {
+        queue = new PriorityQueue<>(ComparatorH.getComparatorH());
         No aux = raiz;
 
         if (op == 1)
-            raiz.setH(misplacedTiles(raiz.estado));
+            raiz.setH(States.getHeutistic(raiz.estado, 1)); // H1 - peças fora do lugar
         else
-            raiz.setH(manhattanDistance(raiz.estado));
+            raiz.setH(States.getHeutistic(raiz.estado, 2)); // H2 - Algoritmo Manhattan distances
 
         int distance = raiz.getH();
 
@@ -169,46 +120,51 @@ public class Busca {
         }
         return aux;
     }
+
+    //################### BUSCA A* #################################################
+    public No aStar(No raiz, int op) {
+        queue = new PriorityQueue<>(ComparatorH.getComparatorGH());
+        No aux = raiz;
+
+        if (op == 1)
+            raiz.setH(States.getHeutistic(raiz.estado, 1)); // H1 - peças fora do lugar
+        else
+            raiz.setH(States.getHeutistic(raiz.estado, 2)); // H2 - Algoritmo Manhattan distances
+
+        int distance = raiz.getH();
+
+        if (distance == 0)
+            return raiz;
+
+        while (distance != 0) {
+            States.genStates(aux, queue, op);
+            aux = queue.poll();
+            distance = aux.getH();
+        }
+        return aux;
+    }
 }
 
-//################### COMPARATOR H ############################################# 
 class ComparatorH {
+    //################### COMPARATOR H #############################################
     public static Comparator<No> getComparatorH() {
-        return new Comparator<No>() {
-            @Override
-            public int compare(No o1, No o2) {
-                if (o1.getH() > o1.getH())
-                    return 1;
-                else if (o1.getH() < o1.getH())
-                    return -1;
-                return 0;
-            }
+        return (o1, o2) -> {
+            if (o1.getH() > o1.getH())
+                return 1;
+            else if (o1.getH() < o1.getH())
+                return -1;
+            return 0;
         };
     }
-//################### COMPARATOR GH ############################################
+
+    //################### COMPARATOR GH ############################################
     public static Comparator<No> getComparatorGH() {
-        return new Comparator<No>() {
-            @Override
-            public int compare(No o1, No o2) {
-                if (o1.getGH() > o2.getGH())
-                    return 1;
-                else if (o1.getGH() < o2.getGH())
-                    return -1;
-                return 0;
-            }
-        };
-    }
-//################### COMPARATOR G #############################################    
-    public static Comparator<No> getComparatorG() {
-        return new Comparator<No>() {
-            @Override
-            public int compare(No o1, No o2) {
-                if (o1.getG() < o2.getG())
-                    return 1;
-                else if (o1.getG() > o2.getG())
-                    return -1;
-                return 0;
-            }
+        return (o1, o2) -> {
+            if (o1.getGH() > o2.getGH())
+                return 1;
+            else if (o1.getGH() < o2.getGH())
+                return -1;
+            return 0;
         };
     }
 }

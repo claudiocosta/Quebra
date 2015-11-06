@@ -1,8 +1,6 @@
 package Puzzle;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Scanner;
 
 /**
@@ -14,23 +12,23 @@ import java.util.Scanner;
 
 public class Puzzle {
     public static void main(String[] args) {
-        List<No> arvore = new LinkedList<>();
+        LinkedList<No> arvore = new LinkedList<>();
         Busca find = new Busca();
-        Scanner scan = new Scanner(System.in);
-        int opcao;
+        Scanner input = new Scanner(System.in);
+        int opcao, opcaoH = 0;
 
         // Teste com custo da solução //#
         //int iniciar[] = new int[]{1, 2, 3, 4, 5, 6, 0, 7, 8}; //2
         //int iniciar[] = new int[]{1, 5, 2, 4, 0, 3, 7, 8, 6}; //4
         //int iniciar[] = new int[]{0, 2, 3, 1, 7, 5, 8, 4, 6}; //8
-        int iniciar[] = new int[]{1, 2, 3, 7, 0, 8, 6, 4, 5}; //10
+        //int iniciar[] = new int[]{1, 2, 3, 7, 0, 8, 6, 4, 5}; //10
         //int iniciar[] = new int[]{2, 6, 3, 1, 7, 8, 4, 5, 0}; //12
         //int iniciar[] = new int[]{1, 3, 0, 2, 6, 5, 4, 7, 8}; //12
         //int iniciar[] = new int[]{0, 3, 6, 2, 1, 7, 4, 8, 5}; //14
         //int iniciar[] = new int[]{0, 2, 3, 7, 4, 1, 8, 6, 5}; //14
         //int iniciar[] = new int[]{2, 8, 3, 5, 0, 6, 1, 4, 7}; //14
         //int iniciar[] = new int[]{7, 4, 1, 8, 3, 2, 0, 5, 6}; //14
-        //int iniciar[] = new int[]{3, 5, 0, 2, 1, 7, 8, 4, 6}; //16
+        int iniciar[] = new int[]{3, 5, 0, 2, 1, 7, 8, 4, 6}; //16
         //int iniciar[] = new int[]{1, 5, 4, 8, 6, 2, 0, 7, 3}; //18
         //int iniciar[] = new int[]{4, 5, 3, 2, 0, 1, 7, 6, 8}; //20
         //int iniciar[] = new int[]{3, 4, 5, 8, 0, 6, 7, 1, 2}; //22
@@ -40,7 +38,7 @@ public class Puzzle {
         //int iniciar[] = new int[]{5, 2, 1, 3, 0, 4, 6, 8, 7}; //30
 
 
-        No raiz = new No(iniciar, "raiz", null, 0, 0, 9);
+        No raiz = new No(iniciar, "raiz", null, 0, 9);
         No aux = new No();
 
         System.out.println("+++++++++++++++++++++++++++");
@@ -52,8 +50,17 @@ public class Puzzle {
         System.out.println("6- Busca GME");
         System.out.println("7- Busca A*");
 
-        opcao = 1;//scan.nextInt();
+        opcao = input.nextInt();
+        if (opcao > 5) {
+            while (opcaoH < 1 || opcaoH > 2) {
+                System.out.println("1- H1 - misplacedTiles");
+                System.out.println("2- H2 - manhattanDistance");
+                opcaoH = input.nextInt();
+            }
+        }
+
         long startTime = System.currentTimeMillis();
+
         switch (opcao) {
             case 1:
                 aux = find.buscaLargura(raiz);
@@ -71,24 +78,16 @@ public class Puzzle {
                 aux = find.buscaCustoUniforme(raiz);
                 break;
             case 6:
-                System.out.println("1- H1 - misplacedTiles");
-                System.out.println("2- H2 - manhattanDistance");
-                opcao = 2;//scan.nextInt();
-
-                aux = find.buscaGME(raiz, opcao);
+                aux = find.buscaGME(raiz, opcaoH);
                 break;
             case 7:
-                System.out.println("1- H1 - misplacedTiles");
-                System.out.println("2- H2 - manhattanDistance");
-                opcao = 2;//scan.nextInt();
-
-                aux = find.aStar(raiz, opcao);
+                aux = find.aStar(raiz, opcaoH);
                 break;
         }
 
-        System.out.println("Inicial");
+        System.out.println("\nInicial");
         raiz.printEstado();
-        System.out.println("Final");
+        System.out.println("\nFinal");
         aux.printEstado();
         // empilha os nos para imprimir ordenado ascendente
         while (aux.pai != null) {
@@ -99,7 +98,7 @@ public class Puzzle {
 
         // imprime o caminho da solução
         long endTime = System.currentTimeMillis();
-        System.out.printf("Solução #time: %d ms\n", endTime - startTime);
+        System.out.printf("\nSolução #time: %d ms\n\n", endTime - startTime);
 
         while (arvore.size() != 0) {
             aux = arvore.remove(arvore.size() - 1);

@@ -3,8 +3,12 @@ package Puzzle;
 import java.util.AbstractCollection;
 
 /**
- * Created by cristiano on 04/11/15.
+ * Cristiano Vicente RA 443913
+ * Claudio Roberto Costa RA 527033
+ * Rafael Anselmo RA 525650
+ * Melisa Cordeiro RA 532533
  */
+
 public class States {
     public static void genStates(No aux, AbstractCollection<No> list) {
         genStates(aux, list, 0);
@@ -91,7 +95,6 @@ public class States {
                 if (array[i] != 0)
                     heuristic += Math.abs((i / 3) - ((array[i] - 1) / 3)) + Math.abs((i % 3) - ((array[i] - 1) % 3));
             }
-
         } else return 0;
         return heuristic;
     }
