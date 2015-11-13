@@ -14,6 +14,9 @@ public class States {
         genStates(aux, list, 0);
     }
 
+    /* Gera todos os estados possíveis a partir do nó pai
+     * pos_ant guarda a posição do index do pai do nó atual a ser gerado os estados,
+     * impedindo que seja gerado o nó pai novamente */
     public static void genStates(No aux, AbstractCollection<No> list, int op) {
         int index = pos_0(aux);
         int posX = index % 3;

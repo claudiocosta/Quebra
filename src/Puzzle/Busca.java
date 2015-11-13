@@ -17,9 +17,8 @@ public class Busca {
     LinkedList<No> list = new LinkedList<>();
     PriorityQueue<No> queue;
 
-    int limite = 5;
 
-    //################### TESTA O OBJETIVO #########################################
+    //################### TESTE O OBJETIVO #########################################
     public boolean testeObjetivo(int[] base) {
         int objetivo[] = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 0};
         return Arrays.equals(base, objetivo);
@@ -39,7 +38,7 @@ public class Busca {
     }
 
     //################### BUSCA EM PROFUNDIDADE LIMITADA ###########################
-    public No buscaProfLimit(No raiz) {
+    public No buscaProfLimit(No raiz, int limite) {
         list.add(raiz);
         while (!list.isEmpty()) {
             No aux = list.remove(list.size() - 1);
@@ -66,22 +65,13 @@ public class Busca {
 
     //################### BUSCA DE APROFUNDAMENTO ITERATIVO ########################
     public No buscaIDA(No raiz) {
-        list.add(raiz);
-        while (!list.isEmpty()) {
-            No aux = list.remove(list.size() - 1);
-            System.out.println(list.size());
-            //aux.printEstado();
-            if (testeObjetivo(aux.estado))
-                return aux;
-            else if (aux.g < limite)
-                States.genStates(aux, list);
-            else if (aux.g == limite && list.isEmpty()) {
-                limite++;
-                States.genStates(aux, list);
-                System.out.println(limite + " g " + aux.g);
-            }
+        No aux = raiz;
+        int limite = 0;
+        while (!testeObjetivo(aux.estado)) {
+            aux = buscaProfLimit(raiz, limite);
+            limite++;
         }
-        return raiz;
+        return aux;
     }
 
     //################### BUSCA DE CUSTO UNIFORME ##################################
