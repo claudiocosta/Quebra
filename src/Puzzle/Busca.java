@@ -139,9 +139,9 @@ class ComparatorH {
     //################### COMPARATOR H #############################################
     public static Comparator<No> getComparatorH() {
         return (o1, o2) -> {
-            if (o1.getH() > o1.getH())
+            if (o1.getH() > o2.getH())
                 return 1;
-            else if (o1.getH() < o1.getH())
+            else if (o1.getH() < o2.getH())
                 return -1;
             return 0;
         };
